@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
-import HeroCard from '/components/hero/hero-card';
-import HeroTime from '/components/hero/hero-time';
+import HeroCard from '/components/Hero/hero-card';
+import HeroTime from '/components/Hero/hero-time';
 import HeroBreadcrumbs from './hero-breadcrumbs';
 
 const Hero = () => {

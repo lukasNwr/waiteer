@@ -2,21 +2,45 @@ import React, { useEffect, useState, useRef, createRef } from 'react';
 import MenuItem from './menu-item';
 // import 'mutationobserver-shim'
 
-const menuItems = {
-  SushiMenu: 0,
-  Forreter: null,
-  StoreMaki: null,
-  SpecialRoll: null,
-  Nigiri: null,
-};
+// const menuItems = {
+//   SushiMenu: 0,
+//   Forreter: null,
+//   StoreMaki: null,
+//   SpecialRoll: null,
+//   Nigiri: null,
+// };
+
+const menuItems = [
+  { name: 'SushiMenu' },
+  { name: 'Forreter' },
+  { name: 'StoreMaki' },
+];
 
 const SideMenu = () => {
   const [activeItem, setActiveItem] = useState('SushiMenu');
   const refs = useRef([]);
+  const [selected, setSelected] = useState();
 
+  const elementRefs = menuItems.map(React.useRef);
+
+  const createObservers = () => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isInterrsecting) {
+            setSelected(entry.target.id);
+          }
+        });
+      },
+      { threshold: 1.0 }
+    );
+    elementRefs.forEach(({ current }) => observer.observe(current));
+  };
 
   useEffect(() => {
-   window.addEventListener('scroll', handleScroll);
+    createObservers();
+
+    window.addEventListener('scroll', handleScroll);
   }, [activeItem]);
 
   const handleScroll = () => {
@@ -34,21 +58,16 @@ const SideMenu = () => {
       setActiveItem(curSection);
     }
 
-    console.log('Current section:', curSection)
+    console.log('Current section:', curSection);
   };
 
-
-  const menuList = Object.keys(menuItems).map((e, i) => (
+  const menuList = menuItems.map((category, i) => (
     <MenuItem
-      itemName={e}
-      key={`menuitem_${i}`}
-      active={e === activeItem ? true : false}
+      ref={elementRefs[i]}
+      id={`${category.name.replace(/\s+/g, '')}`}
+      key={category.name}
     />
   ));
-
-  const scrollToRef = () => {
-    refs[0].scrollIntoView();
-  };
 
   return (
     <>

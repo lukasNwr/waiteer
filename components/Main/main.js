@@ -44,12 +44,8 @@ const Main = () => {
             <div className="flex flex-col gap-5">
               <div id="Top"></div>
               <div>
-                <span
-                  ref={someRef}
-                  id="SushiMenu"
-                  className="text-2xl text-gray-400"
-                >
-                  Sushi Menu
+                <span id="SushiMenu" className="text-2xl text-gray-400">
+                  SushiMenu
                 </span>
               </div>
               <MenuCard />
@@ -69,27 +65,7 @@ const Main = () => {
               <MenuCard />
               <div>
                 <span id="StoreMaki" className="text-2xl text-gray-400">
-                  Store Maki
-                </span>
-              </div>
-              <MenuCard />
-              <MenuCard />
-              <MenuCard />
-              <MenuCard />
-              <MenuCard />
-              <div>
-                <span id="SpecialRoll" className="text-2xl text-gray-400">
-                  Special Roll
-                </span>
-              </div>
-              <MenuCard />
-              <MenuCard />
-              <MenuCard />
-              <MenuCard />
-              <MenuCard />
-              <div>
-                <span id="Nigiri" className="text-2xl text-gray-400">
-                  Nigiri
+                  StoreMaki
                 </span>
               </div>
               <MenuCard />
