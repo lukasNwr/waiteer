@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef, createRef } from 'react';
+import React, { useEffect, useState, useRef, createRef, useContext } from 'react';
 import MenuItem from './menu-item';
+import { ActiveContext } from '../main';
 // import 'mutationobserver-shim'
 
 // const menuItems = {
@@ -17,31 +18,11 @@ const menuItems = [
 ];
 
 const SideMenu = () => {
-  const [activeItem, setActiveItem] = useState('SushiMenu');
-  const refs = useRef([]);
-  const [selected, setSelected] = useState();
-
-  const elementRefs = menuItems.map(React.useRef);
-
-  const createObservers = () => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isInterrsecting) {
-            setSelected(entry.target.id);
-          }
-        });
-      },
-      { threshold: 1.0 }
-    );
-    elementRefs.forEach(({ current }) => observer.observe(current));
-  };
+  const [activeItem, setActiveItem] = useContext(ActiveContext);
 
   useEffect(() => {
-    createObservers();
-
-    window.addEventListener('scroll', handleScroll);
-  }, [activeItem]);
+    console.log("Menu List", menuList)
+  });
 
   const handleScroll = () => {
     const curPos = window.scrollY;
@@ -57,17 +38,14 @@ const SideMenu = () => {
     if (curSection !== activeItem) {
       setActiveItem(curSection);
     }
-
-    console.log('Current section:', curSection);
   };
 
-  const menuList = menuItems.map((category, i) => (
-    <MenuItem
-      ref={elementRefs[i]}
-      id={`${category.name.replace(/\s+/g, '')}`}
-      key={category.name}
-    />
-  ));
+    const Menu = (menuList, active) => menuList.map((el) => {
+      const {name} = el;
+      return <MenuItem itemName={name} key={name} active={active}/>
+    })
+
+  const menuList = Menu(menuItems.slice(0, menuItems.length), activeItem) 
 
   return (
     <>

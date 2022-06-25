@@ -21,9 +21,9 @@ const Hero = () => {
         <div className="h-fit top-[18rem] left-[9rem] absolute">
           <HeroCard />
         </div>
-        <div className="h-fit top-[25] bottom-[17rem] left-[9rem] absolute">
-          <HeroBreadcrumbs />
-        </div>
+        {/* <div className="h-fit top-[25] bottom-[17rem] left-[9rem] absolute"> */}
+        {/*   <HeroBreadcrumbs /> */}
+        {/* </div> */}
       </div>
     </>
   );

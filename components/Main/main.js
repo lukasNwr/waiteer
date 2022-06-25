@@ -1,30 +1,40 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, createContext } from 'react';
 import MenuCard from '/components/Main/menu-card';
 import Link from 'next/link';
 import MainMenu from '/components/Main/main-menu';
 import SideMenu from './Side-menu/side-menu';
 
-const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop);
+export const ActiveContext = createContext();
 
 const Main = () => {
-  const [refs, setRefs] = useState([]);
-  const executeScroll = () => scrollToRef(myRef);
-  const someRef = useRef();
 
-  const handleOnClick = (event, ref) => {
-    refToScroll = refs.indexOf(ref);
-    refToSroll.scrollIntoView();
+  const menuItems = [
+    { name: 'SushiMenu' },
+    { name: 'Forreter' },
+    { name: 'StoreMaki' },
+  ];
+
+  const [activeItem, setActiveItem] = useState("");
+  const elementRefs = menuItems.map(React.useRef);
+
+  const createObservers = () => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isInterrsecting) {
+            setActiveItem(entry.target.id);
+          }
+        });
+      },
+      { threshold: 1.0 }
+    );
+    elementRefs.forEach(({ current }) => observer.observe(current));
   };
 
   useEffect(() => {
-    console.log('someRef', someRef.current);
-    const observer = new IntersectionObserver((entries, observer) => {
-      const entry = entries[0];
-      console.log('entry', entry);
-      console.log('entry.isIntersecting', entry.isIntersecting);
-    });
-    observer.observe(someRef.current);
-  }, []);
+    createObservers();
+    console.log("active item:  ", activeItem)
+  })
 
   return (
     <>
@@ -33,36 +43,22 @@ const Main = () => {
           <MainMenu />
           <div className="flex items-start gap-10 pt-5 max-h-fit">
             <div className="flex flex-col w-fit p-5 pr-10 gap-3 sticky top-0">
-              <SideMenu />
-              {/* <span className="text-lg font-bold text-gray-700">
-                KATEGORIER
-              </span>
-              <span className="text-lg text-gray-400">Menu 1</span>
-              <span className="text-lg text-gray-400">Menu 2</span>
-              <span className="text-lg text-gray-400">Menu 3</span> */}
+              <ActiveContext.Provider value={[activeItem, setActiveItem]}>
+                <SideMenu menuItems={menuItems} />
+              </ActiveContext.Provider>
             </div>
+
             <div className="flex flex-col gap-5">
-              <div id="Top"></div>
-              <div>
-                <span id="SushiMenu" className="text-2xl text-gray-400">
-                  SushiMenu
-                </span>
-              </div>
-              <MenuCard />
-              <MenuCard />
-              <MenuCard />
-              <MenuCard />
-              <MenuCard />
-              <div>
-                <span id="Forreter" className="text-2xl text-gray-400">
-                  Forreter
-                </span>
-              </div>
-              <MenuCard />
-              <MenuCard />
-              <MenuCard />
-              <MenuCard />
-              <MenuCard />
+              {menuItems.map((category, i) => (
+                <div ref={elementRefs[i]} key={category.name} id={`${category.name.replace(/\s+/g, "")}`}>
+                  <span className='text-2xl text-gray-400'>{category.name}</span>
+                  <MenuCard />
+                  <MenuCard />
+                  <MenuCard />
+                  <MenuCard />
+                  <MenuCard />
+                </div>
+              ))}
               <div>
                 <span id="StoreMaki" className="text-2xl text-gray-400">
                   StoreMaki
